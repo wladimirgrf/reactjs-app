@@ -19,7 +19,7 @@
 </p>
 
 <p align="center">
-  <img alt="App" src=".github/reactjsApp.png" width="100%">
+  <img alt="App" src=".github/reactJSApp.png" width="100%">
 </p>
 
 ## 🚀 Instalação e execução
