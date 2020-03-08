@@ -7,12 +7,12 @@
 </h3>
 
 <p align="center">
-  <img alt="GitHub language count" src="https://img.shields.io/github/languages/count/wladimirfrost/reactjs-project">
+  <img alt="GitHub language count" src="https://img.shields.io/github/languages/count/wladimirfrost/reactjsApp">
 
-  <img alt="Repository size" src="https://img.shields.io/github/repo-size/wladimirfrost/reactjs-project">
+  <img alt="Repository size" src="https://img.shields.io/github/repo-size/wladimirfrost/reactjsApp">
 
   <a href="https://github.com/Rocketseat/semana-omnistack-10/issues">
-    <img alt="Repository issues" src="https://img.shields.io/github/issues/wladimirfrost/reactjs-project">
+    <img alt="Repository issues" src="https://img.shields.io/github/issues/wladimirfrost/reactjsApp">
   </a>
 
   <img alt="License" src="https://img.shields.io/badge/license-MIT-brightgreen">
