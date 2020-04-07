@@ -3,7 +3,7 @@
 </h1>
 
 <h3 align="center">
-  Primeiro projeto com ReactJS
+  First React Page
 </h3>
 
 <p align="center">
@@ -22,13 +22,12 @@
   <img alt="Frontend" src=".github/reactJSApp.png" width="100%">
 </p>
 
-## 🚀 Instalação e execução
+## 💻 Getting started
 
-1. Faça um clone desse repositório;
-2. Entre na pasta rodando `cd reactjsApp`;
-3. Rode `yarn` para instalar as dependências;
-4. Rode `yarn start` para iniciar o servidor de desenvolvimento;
-5. Abra `http://localhost:3000` para ver o projeto no navegador.
+1. Clone the repository;
+2. Move into the project folder: `cd reactjsApp`;
+3. Run `yarn` to install all the dependencies;
+4. Run `yarn start`;
 
 ## 🤝 Contributing
 
