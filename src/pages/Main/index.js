@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FaGithubAlt, FaPlus, FaSpinner } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 
@@ -6,95 +6,77 @@ import Container from '../../components/Container/index';
 import { Form, SubmitButton, List } from './styles';
 import api from '../../services/api';
 
-class Main extends Component {
-  constructor() {
-    super().state = {
-      newRepo: '',
-      repositories: [],
-      loading: false,
-    };
-  }
+export default function Main() {
+  const [repositories, setRepositories] = useState([]);
+  const [newRepo, setNewRepo] = useState('');
+  const [loading, setLoading] = useState(false);
 
-  componentDidMount() {
+  useEffect(() => {
     const repositories = localStorage.getItem('repositories');
 
     if (repositories) {
-      this.setState({ repositories: JSON.parse(repositories) });
+      setRepositories(JSON.parse(repositories));
     }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem('repositories', JSON.stringify(repositories));
+  }, [repositories]);
+
+  function handleInputChange(e) {
+    setNewRepo(e.target.value);
   }
 
-  componentDidUpdate(_, prevState) {
-    const { repositories } = this.state;
-    if (prevState.repositories !== repositories) {
-      localStorage.setItem('repositories', JSON.stringify(repositories));
-    }
-  }
-
-  handleInputChange = e => {
-    this.setState({ newRepo: e.target.value });
-  };
-
-  handleSubmit = async e => {
+  async function handleSubmit(e) {
     e.preventDefault();
 
-    this.setState({ loading: true });
-
-    const { newRepo, repositories } = this.state;
+    setLoading(true);
 
     const response = await api.get(`/repos/${newRepo}`);
-
-    console.log(response);
 
     const data = {
       name: response.data.full_name,
     };
 
-    this.setState({
-      repositories: [...repositories, data],
-      newRepo: '',
-      loading: false,
-    });
-  };
-
-  render() {
-    const { newRepo, repositories, loading } = this.state;
-    return (
-      <Container>
-        <h1>
-          <FaGithubAlt />
-          Repositórios
-        </h1>
-        <Form onSubmit={this.handleSubmit} data-testid="repo-form">
-          <input
-            data-testid="repo-input"
-            type="text"
-            placeholder="Adicionar repositório"
-            value={newRepo}
-            onChange={this.handleInputChange}
-          />
-
-          <SubmitButton disabled={loading}>
-            {loading ? (
-              <FaSpinner color="#fff" size={14} />
-            ) : (
-              <FaPlus color="#fff" size={14} />
-            )}
-          </SubmitButton>
-        </Form>
-
-        <List data-testid="repo-list">
-          {repositories.map(repository => (
-            <li key={repository.name} data-testid={repository.name}>
-              <span>{repository.name}</span>
-              <Link to={`/repository/${encodeURIComponent(repository.name)}`}>
-                Detalhes
-              </Link>
-            </li>
-          ))}
-        </List>
-      </Container>
-    );
+    setRepositories([...repositories, data]);
+    setNewRepo('');
+    setLoading(false);
   }
-}
 
-export default Main;
+  return (
+    <Container>
+      <h1>
+        <FaGithubAlt />
+        Repositórios
+      </h1>
+      <Form onSubmit={handleSubmit}>
+        <input
+          type="text"
+          name="repotxt"
+          placeholder="Adicionar repositório"
+          value={newRepo}
+          onChange={handleInputChange}
+        />
+
+        <SubmitButton disabled={loading}>
+          {loading ? (
+            <FaSpinner color="#fff" size={14} />
+          ) : (
+            <FaPlus color="#fff" size={14} />
+          )}
+        </SubmitButton>
+      </Form>
+
+      <List data-testid="repo-list">
+        {repositories.map(repository => (
+          <li key={repository.name} data-testid={repository.name}>
+            <span>{repository.name}</span>
+            {/* <Link to={`/repository/${encodeURIComponent(repository.name)}`}>
+                Detalhes
+              </Link> */}
+          </li>
+        ))}
+      </List>
+    </Container>
+  );
+}

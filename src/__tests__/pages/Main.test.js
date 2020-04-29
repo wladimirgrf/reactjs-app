@@ -2,31 +2,61 @@ import React from 'react';
 import { render, fireEvent, cleanup } from '@testing-library/react';
 import MockAdapter from 'axios-mock-adapter';
 
-import { axios } from 'axios';
+import { mount, configure } from 'enzyme';
+
+import Adapter from 'enzyme-adapter-react-16';
+
 import api from '../../services/api';
 import Main from '../../pages/Main';
 
-const apiMock = new MockAdapter(api, { delayResponse: 10000 });
+configure({ adapter: new Adapter() });
+
+const apiMock = new MockAdapter(api);
 
 describe('Main page', () => {
   it('should be able to add new repository', async () => {
-    const { getByText, getByTestId } = render(<Main />);
+    const { getByTestId } = render(<Main />);
+
+    const repoName = 'wladimirfrost/devRadar';
 
     fireEvent.change(getByTestId('repo-input'), {
-      target: { value: 'wladimirfrost/devRadar' },
+      target: { value: repoName },
     });
 
-    apiMock.onGet('/repos/wladimirfrost/devRadar').reply(200, {
-      data: { full_name: 'wladimirfrost/devRadar' },
+    apiMock.onGet(`https://api.github.com/repos/${repoName}`).reply(200, {
+      full_name: repoName,
     });
 
     fireEvent.submit(getByTestId('repo-form'));
 
-    // expect(getByTestId('repo-list')).toContainElement(
-    //   getByText('wladimirfrost/devRadar')
-    // );
+    expect(localStorage.setItem).toHaveBeenCalledWith(
+      'repositories',
+      JSON.stringify([{ full_name: repoName }])
+    );
+  });
 
-    expect(1 + 2).toBe(3);
+  it('should be able to add new repository', () => {
+    const main = mount(<Main />);
+
+    const repoName = 'wladimirfrost/devRadar';
+
+    const repoInput = main.find('input');
+
+    repoInput.instance().value = repoName;
+    repoInput.simulate('change', repoInput);
+
+    apiMock.onGet(`https://api.github.com/repos/${repoName}`).reply(200, {
+      full_name: repoName,
+    });
+
+    main.find('form').simulate('submit');
+
+    expect(localStorage.setItem).toHaveBeenCalledWith(
+      'repositories',
+      JSON.stringify([{ full_name: repoName }])
+    );
+
+    main.unmount();
   });
 
   // it('should store repository in storage', () => {
