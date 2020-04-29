@@ -1,4 +1,5 @@
 import React from 'react';
+import { BrowserRouter } from 'react-router-dom';
 import { render, fireEvent, cleanup, act } from '@testing-library/react';
 import MockAdapter from 'axios-mock-adapter';
 
@@ -21,7 +22,11 @@ describe('Main page', () => {
   });
 
   it('should be able to add new repository', async () => {
-    const { getByTestId } = render(<Main />);
+    const { getByTestId } = render(
+      <BrowserRouter>
+        <Main />
+      </BrowserRouter>
+    );
 
     fireEvent.change(getByTestId('repo-input'), {
       target: { value: repoName },
@@ -41,7 +46,11 @@ describe('Main page', () => {
   });
 
   it('should store repository in storage', async () => {
-    let { getByTestId } = render(<Main />);
+    let { getByTestId } = render(
+      <BrowserRouter>
+        <Main />
+      </BrowserRouter>
+    );
 
     fireEvent.change(getByTestId('repo-input'), {
       target: { value: repoName },
@@ -56,7 +65,11 @@ describe('Main page', () => {
 
     cleanup();
 
-    ({ getByTestId } = render(<Main />));
+    ({ getByTestId } = render(
+      <BrowserRouter>
+        <Main />
+      </BrowserRouter>
+    ));
 
     expect(localStorage.setItem).toHaveBeenCalledWith(
       'repositories',

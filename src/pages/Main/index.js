@@ -71,9 +71,9 @@ export default function Main() {
         {repositories.map(repository => (
           <li key={repository.name} data-testid={repository.name}>
             <span>{repository.name}</span>
-            {/* <Link to={`/repository/${encodeURIComponent(repository.name)}`}>
-                Detalhes
-              </Link> */}
+            <Link to={`/repository/${encodeURIComponent(repository.name)}`}>
+              Detalhes
+            </Link>
           </li>
         ))}
       </List>
